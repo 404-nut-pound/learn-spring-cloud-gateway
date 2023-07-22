@@ -4,9 +4,9 @@ spring:
   cloud:
     gateway:
       default-filters:
-        - name: GatewayLoggingFilter
+        - name: GlobalFilter
           args:
-            baseMessage: Global Logging Filter
+            baseMessage: Global Filter
             preLogger: true
             postLogger: true
       routes:
@@ -15,12 +15,14 @@ spring:
           predicates:
             - Path=/first-service/**
           filters:
-            - AddRequestHeader=gateway-request, first-service-request2
-            - AddResponseHeader=gateway-response, first-service-response2
+            # - AddRequestHeader=gateway-request, first-service-request2
+            # - AddResponseHeader=gateway-response, first-service-response2
+            - CustomFilter
         - id: user-service-2
           uri: http://localhost:8082/
           predicates:
             - Path=/second-service/**
           filters:
-            - AddRequestHeader=gateway-request, second-service-request2
-            - AddResponseHeader=gateway-response, second-service-response2
+            # - AddRequestHeader=gateway-request, second-service-request2
+            # - AddResponseHeader=gateway-response, second-service-response2
+            - CustomFilter
