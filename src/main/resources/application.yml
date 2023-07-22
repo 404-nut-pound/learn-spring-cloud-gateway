@@ -26,3 +26,8 @@ spring:
             # - AddRequestHeader=gateway-request, second-service-request2
             # - AddResponseHeader=gateway-response, second-service-response2
             - CustomFilter
+            - name: LoggingFilter
+              args:
+                baseMessage: Logging Filter
+                preLogger: true
+                postLogger: true
