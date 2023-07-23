@@ -13,24 +13,24 @@ spring:
         - id: user-service-1
           uri: lb://USER-SERVICE-1
           predicates:
-            - Path=/first-service/**
+            - Path=/user/**
           filters:
-            # - AddRequestHeader=gateway-request, first-service-request2
-            # - AddResponseHeader=gateway-response, first-service-response2
-            - CustomFilter
-        - id: user-service-2
-          uri: lb://USER-SERVICE-2
-          predicates:
-            - Path=/second-service/**
-          filters:
-            # - AddRequestHeader=gateway-request, second-service-request2
-            # - AddResponseHeader=gateway-response, second-service-response2
+            # - AddRequestHeader=gateway-request, user-service-request-yml
+            # - AddResponseHeader=gateway-response, user-service-response-yml
             - CustomFilter
             - name: LoggingFilter
               args:
                 baseMessage: Logging Filter
                 preLogger: true
                 postLogger: true
+        - id: catalog-service-1
+          uri: lb://CATALOG-SERVICE-1
+          predicates:
+            - Path=/catalog/**
+        - id: order-service-1
+          uri: lb://ORDER-SERVICE-1
+          predicates:
+            - Path=/order/**
 
 eureka:
   client:
