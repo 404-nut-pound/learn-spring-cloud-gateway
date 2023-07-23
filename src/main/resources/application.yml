@@ -10,19 +10,43 @@ spring:
             preLogger: true
             postLogger: true
       routes:
+        # - id: user-service-1
+        #   uri: lb://USER-SERVICE-1
+        #   predicates:
+        #     - Path=/user/**
+        #   filters:
+        #     # - AddRequestHeader=gateway-request, user-service-request-yml
+        #     # - AddResponseHeader=gateway-response, user-service-response-yml
+        #     - CustomFilter
+        #     - name: LoggingFilter
+        #       args:
+        #         baseMessage: Logging Filter
+        #         preLogger: true
+        #         postLogger: true
         - id: user-service-1
           uri: lb://USER-SERVICE-1
           predicates:
-            - Path=/user/**
+            - Path=/user-service/login
+            - Method=POST
           filters:
-            # - AddRequestHeader=gateway-request, user-service-request-yml
-            # - AddResponseHeader=gateway-response, user-service-response-yml
-            - CustomFilter
-            - name: LoggingFilter
-              args:
-                baseMessage: Logging Filter
-                preLogger: true
-                postLogger: true
+            - RemoveRequestHeader=Cookie
+            - RewritePath=/user-service/(?<segment>.*), /$\{segment}
+        - id: user-service-1
+          uri: lb://USER-SERVICE-1
+          predicates:
+            - Path=/user-service/user
+            - Method=POST
+          filters:
+            - RemoveRequestHeader=Cookie
+            - RewritePath=/user-service/(?<segment>.*), /$\{segment}
+        - id: user-service-1
+          uri: lb://USER-SERVICE-1
+          predicates:
+            - Path=/user-service/**
+            - Method=GET
+          filters:
+            - RemoveRequestHeader=Cookie
+            - RewritePath=/user-service/(?<segment>.*), /$\{segment}
         - id: catalog-service-1
           uri: lb://CATALOG-SERVICE-1
           predicates:
