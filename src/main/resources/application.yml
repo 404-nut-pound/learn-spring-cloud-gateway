@@ -26,11 +26,11 @@ spring:
         - id: user-service-1
           uri: lb://USER-SERVICE-1
           predicates:
-            - Path=/user-service/login
+            - Path=/user-service/login # Gateway로 호출하는 URL
             - Method=POST
           filters:
             - RemoveRequestHeader=Cookie
-            - RewritePath=/user-service/(?<segment>.*), /$\{segment}
+            - RewritePath=/user-service/(?<segment>.*), /$\{segment} # Gateway 통과 이후 전달하게 되는 URL
         - id: user-service-1
           uri: lb://USER-SERVICE-1
           predicates:
@@ -47,6 +47,7 @@ spring:
           filters:
             - RemoveRequestHeader=Cookie
             - RewritePath=/user-service/(?<segment>.*), /$\{segment}
+            - AuthorizationHeaderFilter
         - id: catalog-service-1
           uri: lb://CATALOG-SERVICE-1
           predicates:
@@ -62,3 +63,6 @@ eureka:
     register-with-eureka: true
     service-url:
       defaultZone: http://localhost:8761/eureka
+
+jwt:
+  secret-key: asdf
