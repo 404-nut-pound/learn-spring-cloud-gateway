@@ -55,11 +55,11 @@ spring:
         - id: user-service-1
           uri: lb://USER-SERVICE-1
           predicates:
-            - Path=/user-service/actuator**
+            - Path=/user-service/actuator/**
             - Method=GET, POST
           filters:
             - RemoveRequestHeader=Cookie
-            - RewritePath=/user-service/actuator/(?<segment>.*), /$\{segment}
+            - RewritePath=/user-service/(?<segment>.*), /$\{segment}
         - id: catalog-service-1
           uri: lb://CATALOG-SERVICE-1
           predicates:
@@ -68,6 +68,11 @@ spring:
           uri: lb://ORDER-SERVICE-1
           predicates:
             - Path=/order/**
+  rabbitmq:
+    host: localhost
+    port: 5672
+    username: guest
+    password: guest
 
 eureka:
   client:
@@ -82,4 +87,4 @@ management:
   endpoints:
     web:
       exposure:
-        include: refresh, health, beans, httptrace
+        include: refresh, health, beans, httptrace, busrefresh
