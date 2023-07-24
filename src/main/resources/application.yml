@@ -26,7 +26,7 @@ spring:
         - id: user-service-1
           uri: lb://USER-SERVICE-1
           predicates:
-            - Path=/user-service/login # Gateway로 호출하는 URL
+            - Path=/user-service/login # 사용자가 Gateway로 호출하는 URL
             - Method=POST
           filters:
             - RemoveRequestHeader=Cookie
