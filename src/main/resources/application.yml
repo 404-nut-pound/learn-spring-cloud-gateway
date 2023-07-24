@@ -1,7 +1,11 @@
 spring:
   application:
     name: spring-cloud-gateway
+  config:
+    import: optional:configserver:http://localhost:8888
   cloud:
+    config:
+      name: ecommerce
     gateway:
       default-filters:
         - name: GlobalFilter
@@ -48,6 +52,14 @@ spring:
             - RemoveRequestHeader=Cookie
             - RewritePath=/user-service/(?<segment>.*), /$\{segment}
             - AuthorizationHeaderFilter
+        - id: user-service-1
+          uri: lb://USER-SERVICE-1
+          predicates:
+            - Path=/user-service/actuator**
+            - Method=GET, POST
+          filters:
+            - RemoveRequestHeader=Cookie
+            - RewritePath=/user-service/actuator/(?<segment>.*), /$\{segment}
         - id: catalog-service-1
           uri: lb://CATALOG-SERVICE-1
           predicates:
@@ -63,6 +75,11 @@ eureka:
     register-with-eureka: true
     service-url:
       defaultZone: http://localhost:8761/eureka
+# jwt:
+#   secret-key: asdf
 
-jwt:
-  secret-key: asdf
+management:
+  endpoints:
+    web:
+      exposure:
+        include: refresh, health, beans, httptrace
