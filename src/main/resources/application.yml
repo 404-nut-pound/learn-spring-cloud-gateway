@@ -63,11 +63,17 @@ spring:
         - id: catalog-service-1
           uri: lb://CATALOG-SERVICE-1
           predicates:
-            - Path=/catalog/**
+            - Path=/catalog-service/**
+          filters:
+            - RemoveRequestHeader=Cookie
+            - RewritePath=/catalog-service/(?<segment>.*), /$\{segment}
         - id: order-service-1
           uri: lb://ORDER-SERVICE-1
           predicates:
-            - Path=/order/**
+            - Path=/order-service/**
+          filters:
+            - RemoveRequestHeader=Cookie
+            - RewritePath=/order-service/(?<segment>.*), /$\{segment}
   rabbitmq:
     host: localhost
     port: 5672
